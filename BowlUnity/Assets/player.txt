@@ -1,0 +1,1 @@
+{"name":"cys","lv":1,"hp":0,"atk":10,"speed":10,"cute":10}
