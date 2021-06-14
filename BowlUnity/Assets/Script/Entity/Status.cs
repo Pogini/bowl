@@ -8,7 +8,6 @@ public class Status {
     public string name;
     public int lv;
     public int hp;
-    public int maxhp;
     public int atk;
     public int speed;
     public int cute;

@@ -5,12 +5,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonMonoBehaviour<GameManager>
 {
-    public Character player;
+    public Player player;
 
     [SerializeField]
     TextMeshProUGUI[] statusText;
+
+    public MessageWindow messageWindow;
 
     // Start is called before the first frame update
     void Awake()
@@ -20,7 +22,7 @@ public class GameManager : MonoBehaviour
         //string dataPath = Application.persistentDataPath + "/player.json";
         //Debug.Log("dataPath:" + Application.persistentDataPath);
 
-        player.status = PlayerPrefsUtils.GetObject<Status>("player");
+        player.charactor.status = PlayerPrefsUtils.GetObject<Status>("player");
         //　ファイルが存在しなければ作成
         //if (player == null)
         //{
@@ -35,11 +37,10 @@ public class GameManager : MonoBehaviour
         init_status.cute = 5;
         init_status.color = new Color(0.9f, 0.80f, 0.80f, 1.0f);
         //PlayerPrefsUtils.SetObject("player", init_status);
-        init_status.maxhp = 100;
-        init_status.hp = init_status.maxhp;
-        player.status = init_status;
+        init_status.hp = 100;
+        player.charactor.status = init_status;
         //}
-        player.status.color = new Color(0.9f, 0.80f, 0.80f, 1.0f);
+        player.charactor.status.color = new Color(0.9f, 0.80f, 0.80f, 1.0f);
         SetStatus();
     }
 
@@ -51,10 +52,10 @@ public class GameManager : MonoBehaviour
 
     void SetStatus()
     {
-        statusText[0].text = player.status.name;
-        statusText[1].text = player.status.atk.ToString(); ;
-        statusText[2].text = player.status.speed.ToString(); ;
-        statusText[3].text = player.status.cute.ToString();
-        player.GetComponentInChildren<Renderer>().material.color = player.status.color;
+        statusText[0].text = player.charactor.status.name;
+        statusText[1].text = player.charactor.status.atk.ToString(); ;
+        statusText[2].text = player.charactor.status.speed.ToString(); ;
+        statusText[3].text = player.charactor.status.cute.ToString();
+        player.GetComponentInChildren<Renderer>().material.color = player.charactor.status.color;
     }
 }

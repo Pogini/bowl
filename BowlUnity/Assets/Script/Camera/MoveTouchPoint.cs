@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveTouchPoint : MonoBehaviour
 {
 	
-	Character chara;
+	Player player;
 
 	//　レイを飛ばす距離
 	private float rayRange = 100f;
@@ -34,8 +34,8 @@ public class MoveTouchPoint : MonoBehaviour
 		animator = GetComponent<Animator>();
 		targetPosition = transform.position;
 		velocity = Vector3.zero;
-		chara = GetComponent<Character>();
-		moveSpeed = chara.status.speed / 2.0f;
+		player = GetComponent<Player>();
+		moveSpeed = player.charactor.status.speed / 2.0f;
 	}
 
 	void Update()

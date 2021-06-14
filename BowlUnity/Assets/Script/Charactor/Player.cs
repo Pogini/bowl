@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class Character : MonoBehaviour
+public class Player : MonoBehaviour
 {
     [SerializeField]
-    public Status status;
+    Slider hpSlider;
 
     [SerializeField]
-    Slider hpSlider;
+    public Charactor charactor;
 
     float _forceHeight = 0;       //吹き飛ばす高さ調整値
     float _forcePower = 10;        //吹き飛ばす強さ調整値
@@ -34,11 +34,21 @@ public class Character : MonoBehaviour
     private Vector3 m_Move;
     private bool m_Jump;
 
+    //　弾のゲームオブジェクト
+    [SerializeField]
+    private GameObject bulletPrefab;
+    //　銃口
+    [SerializeField]
+    private Transform muzzle;
+    // ばらつき具合 
+    public float dispersion = 0.1f; 
+
     void Start()
     {
         //controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        speed = status.speed;
+        speed = charactor.status.speed;
+        charactor.currentHp = charactor.status.hp;
         SetHp();
 
         // get the transform of the main camera
@@ -123,20 +133,29 @@ public class Character : MonoBehaviour
 
 void SetHp()
     {
-        if (status.maxhp < status.hp) status.hp = status.maxhp;
-        hpSlider.value = (float)status.hp / (float)status.maxhp;
+        hpSlider.value = (float)charactor.currentHp / (float)charactor.status.hp;
     }
 
     //何かに触れたとき
     //オブジェクトがCharacterControllerで動かされている場合OnControllerColliderHit以外で衝突は検出できなくなる事に注意 
     //OnCollisionEnterは反応しにくくなる（反応しない訳ではない）　また「物体が動いている間だけ」呼び出しが発生する 
-    void OnControllerColliderHit(ControllerColliderHit hit)
+    void OnCollisionEnter(Collision hit)
     {
+        Debug.Log("hit:" + hit.gameObject);
 
         //障害物の場合
-        if (hit.transform.parent.gameObject.tag == "Prop")
+        if (hit.transform.parent != null && hit.transform.parent.gameObject.tag == "Prop")
         {
-            Debug.Log("hit:" + hit.gameObject);
+            //回復アイテムの場合
+            if (hit.transform.parent.gameObject.tag == "RecoveryItem")
+            {
+
+                Destroy(hit.transform.gameObject);
+
+                //回復
+                charactor.onHeal(20);
+                SetHp();
+            }
 
             //ぶつかった相手からRigitBodyを取り出す
             Rigidbody otherRigitbody = hit.transform.parent.gameObject.GetComponent<Rigidbody>();
@@ -145,8 +164,6 @@ void SetHp()
                 return;
             }
 
-            Debug.Log("test2");
-
             //吹き飛ばす方向を求める(プレイヤーから触れたものの方向)
             Vector3 toVec = GetAngleVec(this.gameObject, hit.gameObject);
 
@@ -154,25 +171,12 @@ void SetHp()
             toVec = toVec + new Vector3(0, _forceHeight, 0);
 
             //吹き飛ばし
-            otherRigitbody.AddForce(toVec * status.atk, ForceMode.Impulse);
+            otherRigitbody.AddForce(toVec * charactor.status.atk, ForceMode.Impulse);
 
             //ダメージ
-            status.hp -= 1;
+            charactor.OnDamege(1);
             SetHp();
         }
-
-        //回復アイテムの場合
-        if (hit.transform.parent.gameObject.tag == "RecoveryItem")
-        {
-
-            Destroy(hit.transform.gameObject);
-
-            //回復
-            status.hp += 20;
-            SetHp();
-        }
-
-
     }
 
     Vector3 GetAngleVec(GameObject _from, GameObject _to)
@@ -182,6 +186,29 @@ void SetHp()
         Vector3 toVec = new Vector3(_to.transform.position.x, 0, _to.transform.position.z);
 
         return Vector3.Normalize(toVec - fromVec);
+    }
+
+    //　敵を撃つ
+    public void Shot()
+    {
+        var bulletInstance = Instantiate<GameObject>(bulletPrefab, muzzle.position, muzzle.rotation);
+        bulletInstance.tag = gameObject.tag;
+        bulletInstance.GetComponent<Bullet>().root = gameObject;
+        bulletInstance.GetComponent<Bullet>().damege = charactor.status.atk;
+
+        // 横のばらつき
+        Vector3 dir = bulletInstance.transform.forward * charactor.status.atk * 100;
+        float h = Random.Range(-dispersion, dispersion);
+        if (h >= 0)
+        {
+            dir = Vector3.Slerp(dir, bulletInstance.transform.right, h);
+        }
+        else
+        {
+            dir = Vector3.Slerp(dir, -bulletInstance.transform.right, -h);
+        }
+        bulletInstance.GetComponent<Rigidbody>().AddForce(dir);
+        Destroy(bulletInstance, 5f);
     }
 
 }

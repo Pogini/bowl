@@ -123,6 +123,36 @@ Transform:
   m_Father: {fileID: 1141315184991466823}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1102282863123568364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3551772976390582861}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3551772976390582861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102282863123568364}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.69, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4896438860042757620}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1700913033901008631
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,10 +477,11 @@ GameObject:
   - component: {fileID: 919132148561591736}
   - component: {fileID: 919132148561591735}
   - component: {fileID: 919132148561591734}
-  - component: {fileID: 919132148561591730}
+  - component: {fileID: 3513724800741982161}
+  - component: {fileID: 8945908365350304175}
   m_Layer: 0
   m_Name: cyawan
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -468,6 +499,7 @@ Transform:
   m_Children:
   - {fileID: 4558610812225172842}
   - {fileID: 9055678439837042725}
+  - {fileID: 3551772976390582861}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -540,7 +572,7 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.3
---- !u!114 &919132148561591730
+--- !u!114 &3513724800741982161
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -549,24 +581,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 5240067496500019022}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f674d25f5e5ec844fb18f6c6bd7e5f05, type: 3}
+  m_Script: {fileID: 11500000, guid: 3463cf30c0b5bdf4191882ea7603ac58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpSlider: {fileID: 0}
+  charactor: {fileID: 8945908365350304175}
+  speed: 6
+  jumpSpeed: 8
+  gravity: 20
+  rotateSpeed: 3
+  joystick: {fileID: 0}
+  bulletPrefab: {fileID: 4541463113581350479, guid: 5944334936ec6de48acd4cdbcbff3b06,
+    type: 3}
+  muzzle: {fileID: 3551772976390582861}
+  dispersion: 0.1
+--- !u!114 &8945908365350304175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5240067496500019022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3f56855f81895a4ba5a22e06df0ce71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   status:
     name: 
     lv: 0
     hp: 0
-    maxhp: 0
     atk: 0
     speed: 0
     cute: 0
     color: {r: 0, g: 0, b: 0, a: 0}
-  hpSlider: {fileID: 0}
-  speed: 6
-  jumpSpeed: 8
-  gravity: 20
-  rotateSpeed: 3
-  joystick: {fileID: 0}
+  currentHp: 0
+  damegePrefab: {fileID: 0}
 --- !u!1 &5523937023761737335
 GameObject:
   m_ObjectHideFlags: 0
